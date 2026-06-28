@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRO-LEAGUE | Quinielas Apertura 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 90px;
+        }
+
+        header {
+            margin: 20px 0;
+            text-align: center;
+            width: 100%;
+            max-width: 480px;
+            padding: 0 20px;
+        }
+
+        header h1 {
+            font-size: 26px;
+            color: #00ff88;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #888888;
+            margin-top: 4px;
+        }
+
+        .pantalla {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            padding: 0 20px;
+            animation: fader 0.25s ease;
+        }
+
+        .pantalla.activa {
+            display: block;
+        }
+
+        @keyframes fader {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tarjeta {
+            background-color: #1e1e1e;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .titulo-tarjeta {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888888;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .status-msg {
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .input-text {
+            width: 100%;
+            padding: 14px;
+            background-color: #252525;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .input-text:focus {
+            border-color: #00ff88;
+        }
+
+        .btn-google {
+            width: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-primario {
+            width: 100%;
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-primario:active { transform: scale(0.98); }
+
+        .btn-secundario {
+            width: 100%;
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .bloqueo-container {
+            text-align: center;
+            padding: 30px 10px;
+        }
+        .bloqueo-icono {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .partido-item {
+            background-color: #252525;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+        }
+
+        .partido-info-top {
+            font-size: 11px;
+            color: #888;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .fila-equipos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .escudo-btn {
+            background: #1e1e1e;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 10px 5px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 38%;
+            color: #e0e0e0;
+        }
+
+        .escudo-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11px;
+            color: #fff;
+            background-color: #333;
+        }
+
+        .btn-empate {
+            background: #1e1e1e;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            width: 20%;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .escudo-btn.seleccionado, .btn-empate.seleccionado {
+            border-color: #00ff88;
+            background-color: rgba(0, 255, 136, 0.08);
+            color: #00ff88;
+        }
+
+        .inputs-marcador {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 10px;
+            margin-top: 5px;
+        }
+
+        .input-goles {
+            width: 50px;
+            height: 35px;
+            background-color: #1e1e1e;
+            border: 2px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .tabla-contenedor {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .tabla-contenedor th {
+            color: #888;
+            text-align: left;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .tabla-contenedor td { padding: 12px 0; border-bottom: 1px solid #222; }
+
+        .bloque-banco {
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00ff88;
+        }
+
+        .linea-dato {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .linea-dato span:first-child { color: #888; }
+
+        .nav-inferior {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            background-color: #1e1e1e;
+            display: none;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid #2a2a2a;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-btn.activo { color: #00ff88; }
+        .nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="app-main-title">PRO-LEAGUE</h1>
+        <p id="app-sub-title">Apertura 2026</p>
+    </header>
+
+    <!-- PANTALLA: REGISTRO -->
+    <div id="pantalla-registro" class="pantalla activa">
+        <div class="tarjeta">
+            <p class="titulo-tarjeta">Crear Cuenta de Jugador</p>
+            
+            <button class="btn-google" onclick="simularGoogleAuth()">
+                <svg style="width:18px; height:18px;" viewBox="0 0 24 24"><path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.256-3.133C18.417 1.832 15.614 1 12.24 1 6.033 1 12.24s5.033 11.24 11.24 11.24c6.478 0 10.793-4.537 10.793-10.985 0-.746-.08-1.32-.176-1.71H12.24z"/></svg>
+                Vincular Perfil Google
+            </button>
+
+            <div id="registro-status" class="status-msg"></div>
+
+            <input type="text" class="input-text" id="reg-username" placeholder="Escribe tu Nombre de Usuario">
+
+            <button class="btn-primario" onclick="ejecutarRegistroCompleto()">INGRESAR AL SISTEMA</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA: PRONÓSTICOS -->
+    <div id="pantalla-pronosticos" class="pantalla">
+        <div id="bloqueo-pago" class="tarjeta bloqueo-container" style="display: none;">
+            <div class="bloqueo-icono">🔒</div>
+            <p style="font-weight: bold; margin-bottom: 10px;">Acceso Bloqueado</p>
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 20px;">Para poder pronosticar las jornadas, debes completar tu pago único de inscripción de la temporada.</p>
+            <button class="btn-primario" onclick="irA('pago', document.querySelectorAll('.nav-btn')[2])">REALIZAR PAGO</button>
+        </div>
+
+        <div id="bloqueo-fecha" class="tarjeta bloqueo-container" style="display: none;">
+            <div class="bloqueo-icono">⏳</div>
+            <p style="font-weight: bold; margin-bottom: 10px;" id="bloqueo-fecha-titulo">Próxima Jornada</p>
+            <p style="font-size: 13px; color: #aaa;" id="bloqueo-fecha-desc">Los partidos correspondientes se habilitarán de manera automática al concluir la jornada anterior.</p>
+        </div>
+
+        <div id="panel-juego-activo" style="display: none;">
+            <div style="background-color: #1e1e1e; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #2a2a2a; text-align: center;">
+                <span style="font-size: 14px; font-weight: bold; color: #00ff88;" id="txt-jornada-actual-header">JORNADA ACTIVA</span>
+            </div>
+
+            <div id="contenedor-partidos"></div>
+
+            <div id="juego-status" class="status-msg"></div>
+            <button class="btn-primario" onclick="enviarPronosticosReal()" style="margin-bottom: 30px;">ENVIAR PRONÓSTICOS</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA: TABLA DE POSICIONES -->
+    <div id="pantalla-tabla" class="pantalla">
+        <div class="tarjeta">
+            <p class="titulo-tarjeta">Clasificación General Oficial</p>
+            <table class="tabla-contenedor">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Pos</th>
+                        <th style="width: 60%">Usuario</th>
+                        <th style="width: 25%; text-align: right;">Puntos</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-dinamica-body"></tbody>
+            </table>
+            <div id="tabla-vacia-msg" style="text-align: center; color: #666; font-size: 13px; padding: 15px 0;">
+                Esperando registros y activación de usuarios pagados.
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA: BILLETERA / PAGOS -->
+    <div id="pantalla-pago" class="pantalla">
+        <div class="tarjeta">
+            <p class="titulo-tarjeta">Métodos de Pago Autorizados</p>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h3 style="font-size: 32px; color: #00ff88;">$20.00 MXN</h3>
+                <p style="font-size: 13px; color: #888; margin-top: 4px;">Acceso Completo Apertura 2026</p>
+            </div>
+            
+            <a href="https://paypal.me/JonathanAOlvera" target="_blank" class="btn-secundario" style="border-color: #0070ba; background-color: rgba(0, 112, 186, 0.05); color: #0070ba; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                Pagar vía PayPal
+            </a>
+
+            <div class="bloque-banco">
+                <div class="linea-dato"><span>Banco:</span> <span>BBVA</span></div>
+                <div class="linea-dato"><span>Titular:</span> <span>Jonathan Alexis Olvera Rodríguez</span></div>
+                <div class="linea-dato"><span>Cuenta CLABE:</span> <span style="color:#fff; font-weight:bold; font-size:12px;">012 180 01563014357 3</span></div>
+                <div class="linea-dato"><span>Cuenta:</span> <span style="color:#fff; font-weight:bold;">156 301 4357</span></div>
+                <div class="linea-dato"><span>Código SWIFT:</span> <span style="color:#aaa; font-size:12px;">BCMRMXMMPYM</span></div>
+            </div>
+
+            <div id="pago-status-msg" class="status-msg" style="display:block; background-color: rgba(241, 196, 15, 0.1); color: #f1c40f; margin-top:15px;">
+                Estatus: Esperando validación de transferencia
+            </div>
+
+            <p style="font-size: 11px; color: #666; text-align: center; margin-top: 10px;">Una vez realizado el depósito o transferencia, notifica al administrador para activar tu cuenta inmediatamente desde el panel.</p>
+        </div>
+    </div>
+
+    <!-- NAVEGADOR INFERIOR -->
+    <nav class="nav-inferior" id="barra-navegacion">
+        <button class="nav-btn activo" onclick="irA('pronosticos', this)">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            Jugar
+        </button>
+        <button class="nav-btn" onclick="irA('tabla', this)">
+            <svg viewBox="0 0 24 24"><path d="M10 20h4V4h-4v16zm-6 0h4v-10H4v10zM16 9v11h4V9h-4z"/></svg>
+            Tabla
+        </button>
+        <button class="nav-btn" onclick="irA('pago', this)">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            Pagos
+        </button>
+    </nav>
+
+    <script>
+        const JORNADAS_DATOS = [
+            { id: "J1", nombre: "Jornada 1", rango: "16, 17, 18 de Julio", inicio: new Date("2026-07-16T00:00:00"), fin: new Date("2026-07-19T00:00:00") },
+            { id: "J2", nombre: "Jornada 2", rango: "21, 24, 25, 26 de Julio", inicio: new Date("2026-07-21T00:00:00"), fin: new Date("2026-07-27T00:00:00") }
+        ];
+
+        const PARTIDOS_JORNADA = {
+            "J1": [
+                { id: "j1_p1", local: "Necaxa", visitante: "Juárez", estadio: "Victoria", hora: "19:00", colorL: "#e74c3c", colorV: "#27ae60" },
+                { id: "j1_p2", local: "Tijuana", visitante: "Tigres", estadio: "Caliente", hora: "21:00", colorL: "#c0392b", colorV: "#f1c40f" },
+                { id: "j1_p3", local: "Mazatlán", visitante: "Cruz Azul", estadio: "El Encanto", hora: "19:00", colorL: "#8e44ad", colorV: "#2980b9" },
+                { id: "j1_p4", local: "León", visitante: "Atlas", estadio: "Nou Camp", hora: "19:00", colorL: "#16a085", colorV: "#34495e" },
+                { id: "j1_p5", local: "Guadalajara", visitante: "Toluca", estadio: "Akron", hora: "19:00", colorL: "#c0392b", colorV: "#e74c3c" },
+                { id: "j1_p6", local: "Monterrey", visitante: "Santos", estadio: "BBVA", hora: "19:00", colorL: "#2c3e50", colorV: "#2ecc71" },
+                { id: "j1_p7", local: "Querétaro", visitante: "América", estadio: "La Corregidora", hora: "21:00", colorL: "#2980b9", colorV: "#f1c40f" }
+            ]
+        };
+
+        let eleccionesUsuario = {};
+        let activeJornadaObj = null;
+
+        function calcularJornadaActivaPorFecha() {
+            const ahora = new Date();
+            let seleccionada = JORNADAS_DATOS[0];
+
+            for (let i = 0; i < JORNADAS_DATOS.length; i++) {
+                const j = JORNADAS_DATOS[i];
+                if (ahora >= j.inicio && ahora < j.fin) {
+                    seleccionada = j;
+                    break;
+                }
+                if (i < JORNADAS_DATOS.length - 1) {
+                    const siguiente = JORNADAS_DATOS[i+1];
+                    if (ahora >= j.fin && ahora < siguiente.inicio) {
+                        seleccionada = siguiente;
+                        break;
+                    }
+                }
+            }
+            activeJornadaObj = seleccionada;
+        }
+
+        function simularGoogleAuth() {
+            document.getElementById('reg-username').value = "Invitado_" + Math.floor(Math.random() * 900 + 100);
+            const statusBox = document.getElementById('registro-status');
+            statusBox.style.display = 'block';
+            statusBox.style.backgroundColor = 'rgba(0, 255, 136, 0.1)';
+            statusBox.style.color = '#00ff88';
+            statusBox.innerText = "✓ Autenticado con Perfil de Google";
+        }
+
+        function ejecutarRegistroCompleto() {
+            const username = document.getElementById('reg-username').value.trim();
+            const statusBox = document.getElementById('registro-status');
+            
+            if(!username) {
+                statusBox.style.display = 'block';
+                statusBox.style.backgroundColor = 'rgba(234, 67, 53, 0.1)';
+                statusBox.style.color = '#ea4335';
+                statusBox.innerText = "❌ Ingresa un apodo válido.";
+                return;
+            }
+
+            let listaUsuarios = JSON.parse(localStorage.getItem('quiniela_prod_v1')) || [];
+            let usuario = listaUsuarios.find(u => u.usuario === username);
+            
+            if (!usuario) {
+                // Empiezan en false (Bloqueado) hasta que tú los actives desde admin.html
+                usuario = { usuario: username, pts: 0, pagado: false };
+                listaUsuarios.push(usuario);
+                localStorage.setItem('quiniela_prod_v1', JSON.stringify(listaUsuarios));
+            }
+
+            localStorage.setItem('sesion_prod_username', username);
+
+            document.getElementById('pantalla-registro').classList.remove('activa');
+            document.getElementById('barra-navegacion').style.display = 'flex';
+            
+            calcularJornadaActivaPorFecha();
+            verificarRestriccionesYMontarJuegos();
+            construirTablaPosiciones();
+            irA('pronosticos', document.querySelectorAll('.nav-btn')[0]);
+        }
+
+        function verificarRestriccionesYMontarJuegos() {
+            const username = localStorage.getItem('sesion_prod_username');
+            let listaUsuarios = JSON.parse(localStorage.getItem('quiniela_prod_v1')) || [];
+            let usuario = listaUsuarios.find(u => u.usuario === username);
+
+            const divPago = document.getElementById('bloqueo-pago');
+            const divFecha = document.getElementById('bloqueo-fecha');
+            const divJuego = document.getElementById('panel-juego-activo');
+
+            divPago.style.display = 'none';
+            divFecha.style.display = 'none';
+            divJuego.style.display = 'none';
+
+            if (!usuario || !usuario.pagado) {
+                divPago.style.display = 'block';
+                actualizarEstadoPagoUI(false);
+                return;
+            } else {
+                actualizarEstadoPagoUI(true);
+            }
+
+            if (!PARTIDOS_JORNADA[activeJornadaObj.id]) {
+                divFecha.style.display = 'block';
+                document.getElementById('bloqueo-fecha-titulo').innerText = `${activeJornadaObj.nombre} Cerrada`;
+                document.getElementById('bloqueo-fecha-desc').innerText = `Esta jornada se activará en el rango de fechas correspondientes: ${activeJornadaObj.rango}.`;
+                return;
+            }
+
+            divJuego.style.display = 'block';
+            document.getElementById('txt-jornada-actual-header').innerText = `${activeJornadaObj.nombre.toUpperCase()} ACTIVA (${activeJornadaObj.rango})`;
+            montarPartidosUI();
+        }
+
+        function actualizarEstadoPagoUI(completado) {
+            const msg = document.getElementById('pago-status-msg');
+            if (completado) {
+                msg.style.backgroundColor = 'rgba(0, 255, 136, 0.1)';
+                msg.style.color = '#00ff88';
+                msg.innerText = "Estatus: Cuenta Activada (PAGADO)";
+            } else {
+                msg.style.backgroundColor = 'rgba(241, 196, 15, 0.1)';
+                msg.style.color = '#f1c40f';
+                msg.innerText = "Estatus: Esperando validación de transferencia";
+            }
+        }
+
+        function montarPartidosUI() {
+            const contenedor = document.getElementById('contenedor-partidos');
+            contenedor.innerHTML = "";
+
+            const partidos = PARTIDOS_JORNADA[activeJornadaObj.id];
+            partidos.forEach(p => {
+                const guardado = eleccionesUsuario[p.id] || { opcion: null, golesL: "", golesV: "" };
+
+                const selL = guardado.opcion === 'local' ? 'seleccionado' : '';
+                const selE = guardado.opcion === 'empate' ? 'seleccionado' : '';
+                const selV = guardado.opcion === 'visitante' ? 'seleccionado' : '';
+
+                let html = `
+                    <div class="partido-item">
+                        <div class="partido-info-top">Estadio: ${p.estadio} | ${p.hora} hrs</div>
+                        <div class="fila-equipos">
+                            <button class="escudo-btn ${selL}" id="btn-L-${p.id}" onclick="marcarGanador('${p.id}', 'local')">
+                                <div class="escudo-img" style="background-color: ${p.colorL};">${p.local.substring(0,3).toUpperCase()}</div>
+                                <span>${p.local}</span>
+                            </button>
+                            <button class="btn-empate ${selE}" id="btn-E-${p.id}" onclick="marcarGanador('${p.id}', 'empate')">EMPATE</button>
+                            <button class="escudo-btn ${selV}" id="btn-V-${p.id}" onclick="marcarGanador('${p.id}', 'visitante')">
+                                <div class="escudo-img" style="background-color: ${p.colorV};">${p.visitante.substring(0,3).toUpperCase()}</div>
+                                <span>${p.visitante}</span>
+                            </button>
+                        </div>
+                        <div class="inputs-marcador">
+                            <input type="number" min="0" class="input-goles" id="goles-L-${p.id}" placeholder="0" value="${guardado.golesL}" onchange="actualizarGoles('${p.id}', 'local', this.value)">
+                            <span style="color:#555; font-weight:bold;">-</span>
+                            <input type="number" min="0" class="input-goles" id="goles-V-${p.id}" placeholder="0" value="${guardado.golesV}" onchange="actualizarGoles('${p.id}', 'visitante', this.value)">
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += html;
+            });
+        }
+
+        function marcarGanador(partidoId, opcion) {
+            if (!eleccionesUsuario[partidoId]) eleccionesUsuario[partidoId] = { opcion: null, golesL: "", golesV: "" };
+            eleccionesUsuario[partidoId].opcion = opcion;
+
+            document.getElementById(`btn-L-${partidoId}`).classList.remove('seleccionado');
+            document.getElementById(`btn-E-${partidoId}`).classList.remove('seleccionado');
+            document.getElementById(`btn-V-${partidoId}`).classList.remove('seleccionado');
+
+            document.getElementById(`btn-${opcion === 'local' ? 'L' : opcion === 'empate' ? 'E' : 'V'}-${partidoId}`).classList.add('seleccionado');
+        }
+
+        function actualizarGoles(partidoId, tipo, valor) {
+            if (!eleccionesUsuario[partidoId]) eleccionesUsuario[partidoId] = { opcion: null, golesL: "", golesV: "" };
+            if (tipo === 'local') eleccionesUsuario[partidoId].golesL = valor;
+            if (tipo === 'visitante') eleccionesUsuario[partidoId].golesV = valor;
+        }
+
+        function enviarPronosticosReal() {
+            const partidos = PARTIDOS_JORNADA[activeJornadaObj.id];
+            let completo = true;
+
+            for (let p of partidos) {
+                const choice = eleccionesUsuario[p.id];
+                if (!choice || !choice.opcion || choice.golesL === "" || choice.golesV === "") {
+                    completo = false;
+                    break;
+                }
+            }
+
+            const status = document.getElementById('juego-status');
+            status.style.display = 'block';
+
+            if (!completo) {
+                status.style.backgroundColor = 'rgba(234, 67, 53, 0.1)';
+                status.style.color = '#ea4335';
+                status.innerText = "❌ Debes definir marcador y ganador para todos los encuentros.";
+                return;
+            }
+
+            status.style.backgroundColor = 'rgba(0, 255, 136, 0.1)';
+            status.style.color = '#00ff88';
+            status.innerText = `✓ ¡Pronósticos de la ${activeJornadaObj.nombre} guardados con éxito! Los puntos se actualizarán cuando el administrador valide los marcadores oficiales.`;
+        }
+
+        function construirTablaPosiciones() {
+            const tbody = document.getElementById('tabla-dinamica-body');
+            const vacioMsg = document.getElementById('tabla-vacia-msg');
+            tbody.innerHTML = "";
+
+            let listaUsuarios = JSON.parse(localStorage.getItem('quiniela_prod_v1')) || [];
+            // En la tabla solo se listan los usuarios confirmados por ti como pagados
+            let activos = listaUsuarios.filter(u => u.pagado === true);
+
+            if (activos.length === 0) {
+                vacioMsg.style.display = 'block';
+                return;
+            }
+            vacioMsg.style.display = 'none';
+
+            activos.sort((a, b) => b.pts - a.pts);
+
+            activos.forEach((c, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>#${index + 1}</td>
+                        <td><strong>${c.usuario}</strong></td>
+                        <td style="text-align: right; font-weight: bold; color: #00ff88;">${c.pts} pts</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function irA(idPantalla, boton) {
+            document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('activo'));
+            
+            document.getElementById(`pantalla-${idPantalla}`).classList.add('activa');
+            boton.classList.add('activo');
+
+            if(idPantalla === 'pronosticos') {
+                document.getElementById('app-main-title').innerText = "PRONÓSTICOS";
+                document.getElementById('app-sub-title').innerText = activeJornadaObj ? activeJornadaObj.nombre : "Apertura 2026";
+                verificarRestriccionesYMontarJuegos();
+            } else if(idPantalla === 'tabla') {
+                document.getElementById('app-main-title').innerText = "POSICIONES";
+                document.getElementById('app-sub-title').innerText = "Tabla General";
+                construirTablaPosiciones();
+            } else if(idPantalla === 'pago') {
+                document.getElementById('app-main-title').innerText = "BILLETERA";
+                document.getElementById('app-sub-title').innerText = "Control de Inscripción";
+                const username = localStorage.getItem('sesion_prod_username');
+                let listaUsuarios = JSON.parse(localStorage.getItem('quiniela_prod_v1')) || [];
+                let usuario = listaUsuarios.find(u => u.usuario === username);
+                actualizarEstadoPagoUI(usuario ? usuario.pagado : false);
+            }
+        }
+    </script>
+</body>
+</html>
