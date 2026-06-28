@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRO-LEAGUE | Plataforma Oficial</title>
+    <title>PRO-LEAGUE | Quinielas Premium</title>
     <style>
-        /* ESTILOS BASE - ORGANIC MINIMALISM OSCURO */
+        /* ESTILOS BASE - MINIMALISMO ORGANICO OSCURO */
         * {
             margin: 0;
             padding: 0;
@@ -16,11 +16,11 @@
         body {
             background-color: #121212;
             color: #e0e0e0;
-            padding-bottom: 80px; /* Espacio para la barra de navegación inferior */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            padding-bottom: 90px;
         }
 
         header {
@@ -44,88 +44,125 @@
             margin-top: 4px;
         }
 
-        /* CONTENEDOR PRINCIPAL DE PÁGINAS */
-        .seccion-pantalla {
-            display: none; /* Escondidas por defecto */
+        /* COMPONENTE DE PANTALLAS / PESTAÑAS */
+        .pantalla {
+            display: none;
             width: 100%;
             max-width: 450px;
             padding: 0 20px;
-            animation: fadeIn 0.3s ease;
+            animation: fader 0.25s ease;
         }
 
-        .seccion-pantalla.activa {
-            display: block; /* Solo se muestra la pestaña seleccionada */
+        .pantalla.activa {
+            display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes fader {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* BARRA DE NAVEGACIÓN INFERIOR (ESTILO APP LIGERA) */
-        .nav-inferior {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 450px;
-            background-color: #1e1e1e;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid #2a2a2a;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
-            z-index: 100;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            color: #888888;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.2s ease;
-        }
-
-        .nav-btn.activo {
-            color: #00ff88;
-        }
-
-        .nav-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-
-        /* TARJETAS COMPONENTES UI */
+        /* TARJETAS CONTENEDORAS */
         .tarjeta {
             background-color: #1e1e1e;
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
             border: 1px solid #2a2a2a;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        .subtitulo-seccion {
-            font-size: 14px;
+        .titulo-tarjeta {
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #888888;
             margin-bottom: 15px;
             text-align: center;
+            font-weight: 700;
         }
 
-        /* PESTAÑA 1: PARTIDOS Y PRONÓSTICOS */
+        /* ELEMENTOS DE FORMULARIO (REGISTRO) */
+        .input-text {
+            width: 100%;
+            padding: 14px;
+            background-color: #252525;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .input-text:focus {
+            border-color: #00ff88;
+        }
+
+        .selector-liga {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .opcion-liga {
+            flex: 1;
+            background-color: #252525;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .opcion-liga.seleccionada {
+            border-color: #00ff88;
+            background-color: rgba(0, 255, 136, 0.08);
+            color: #00ff88;
+        }
+
+        .btn-google {
+            width: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* BOTONES DE ACCIÓN */
+        .btn-primario {
+            width: 100%;
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-primario:active { transform: scale(0.98); }
+
+        /* PESTAÑA PRONÓSTICOS */
         .fila-equipos {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .escudo-btn {
@@ -134,28 +171,22 @@
             border-radius: 12px;
             padding: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             width: 38%;
         }
 
         .escudo-img {
-            width: 48px;
-            height: 48px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 11px;
-        }
-
-        .escudo-btn span {
-            font-size: 13px;
-            font-weight: 600;
         }
 
         .btn-empate {
@@ -165,7 +196,7 @@
             padding: 10px;
             cursor: pointer;
             font-weight: bold;
-            color: #aaaaaa;
+            color: #888;
             width: 20%;
             font-size: 11px;
             text-align: center;
@@ -188,7 +219,7 @@
 
         .input-goles {
             width: 55px;
-            height: 42px;
+            height: 40px;
             background-color: #252525;
             border: 2px solid #333;
             border-radius: 8px;
@@ -198,27 +229,7 @@
             font-weight: bold;
         }
 
-        .input-goles:focus {
-            outline: none;
-            border-color: #00ff88;
-        }
-
-        .btn-accion-principal {
-            width: 100%;
-            background-color: #00ff88;
-            color: #000;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-
-        .btn-accion-principal:active { transform: scale(0.98); }
-
-        /* PESTAÑA 2: TABLA DE POSICIONES INTERACTIVA */
+        /* TABLA DE POSICIONES */
         .tabla-contenedor {
             width: 100%;
             border-collapse: collapse;
@@ -226,25 +237,33 @@
         }
 
         .tabla-contenedor th {
-            color: #888888;
-            font-weight: 600;
+            color: #888;
             text-align: left;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             border-bottom: 1px solid #2a2a2a;
         }
 
-        .tabla-contenedor td {
-            padding: 12px 0;
-            border-bottom: 1px solid #222;
+        .tabla-contenedor td { padding: 12px 0; border-bottom: 1px solid #222; }
+
+        /* REGLES VERDES DE EMPATE */
+        .fila-usuario.empatado td {
+            background-color: rgba(46, 204, 113, 0.12);
+            color: #2ecc71;
+            border-bottom: 1px solid rgba(46, 204, 113, 0.25);
         }
 
-        .fila-usuario.top-3 td:first-child {
-            color: #00ff88;
+        .badge-regla {
+            font-size: 9px;
+            background-color: #2ecc71;
+            color: #000;
+            padding: 2px 5px;
+            border-radius: 4px;
             font-weight: bold;
+            margin-left: 6px;
         }
 
-        /* PESTAÑA 3: BILLETERA / TRANSFERENCIA BANKING */
-        .info-banco {
+        /* PESTAÑA TRANSFERENCIAS */
+        .bloque-banco {
             background-color: #252525;
             padding: 15px;
             border-radius: 10px;
@@ -252,45 +271,106 @@
             border-left: 4px solid #00ff88;
         }
 
-        .dato-copiar {
+        .linea-dato {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-size: 14px;
         }
 
-        .dato-copiar span:first-child { color: #888888; }
-        .dato-copiar span:last-child { font-weight: bold; color: #fff; }
+        .linea-dato span:first-child { color: #888; }
 
-        .nota-alerta {
-            font-size: 12px;
-            color: #e67e22;
-            line-height: 1.4;
-            margin-top: 10px;
+        .btn-paypal {
+            width: 100%;
+            background-color: #0070ba;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
         }
+
+        /* BARRA DE NAVEGACIÓN INFERIOR */
+        .nav-inferior {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 450px;
+            background-color: #1e1e1e;
+            display: none; /* Se activa tras registrarse */
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid #2a2a2a;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-btn.activo { color: #00ff88; }
+        .nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 id="titulo-app">PRO-LEAGUE</h1>
-        <p id="subtitulo-app">Jornada 1 · Quiniela de Expertos</p>
+        <h1 id="app-main-title">PRO-LEAGUE</h1>
+        <p id="app-sub-title">Bienvenido a la plataforma de quinielas</p>
     </header>
 
-    <!-- ================= PANTALLA 1: PRONÓSTICOS ================= -->
-    <div id="pantalla-pronosticos" class="seccion-pantalla activa">
+    <!-- ================= PANTALLA: REGISTRO e INICIO ================= -->
+    <div id="pantalla-registro" class="pantalla activa">
+        <div class="tarjeta">
+            <p class="titulo-tarjeta">Crear Nueva Cuenta</p>
+            
+            <!-- Botón de Simulación Google -->
+            <button class="btn-google" onclick="simularGoogleAuth()">
+                <svg style="width:18px; height:18px;" viewBox="0 0 24 24"><path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.256-3.133C18.417 1.832 15.614 1 12.24 1 6.033 1 1 6.033 1 12.24s5.033 11.24 11.24 11.24c6.478 0 10.793-4.537 10.793-10.985 0-.746-.08-1.32-.176-1.71H12.24z"/></svg>
+                Registrarse con Google
+            </button>
+
+            <input type="text" class="input-text" id="reg-username" placeholder="Elige tu Username / Apodo">
+            
+            <p class="titulo-tarjeta" style="margin-top:20px; margin-bottom:10px;">Selecciona tu Liga de Juego</p>
+            <div class="selector-liga">
+                <div class="opcion-liga seleccionada" id="liga-mx" onclick="setLiga('mx')">Liga MX<br><small style="font-size:10px;">Desempate en Liguilla</small></div>
+                <div class="opcion-liga" id="liga-eur" onclick="setLiga('eur')">Liga Europea<br><small style="font-size:10px;">Empates dividen premio</small></div>
+            </div>
+
+            <button class="btn-primario" onclick="ejecutarRegistroCompleto()">COMPLETAR REGISTRO</button>
+        </div>
+    </div>
+
+    <!-- ================= PANTALLA: PRONÓSTICOS ================= -->
+    <div id="pantalla-pronosticos" class="pantalla">
         <div class="tarjeta" id="partido-1">
-            <p class="subtitulo-seccion">¿Quién ganará?</p>
+            <p class="titulo-tarjeta">Partido de la Semana</p>
             <div class="fila-equipos">
                 <button class="escudo-btn" onclick="seleccionarGanador('partido-1', 'local')">
-                    <div class="escudo-img" style="background-color: #f1c40f; color: #000;">AME</div>
-                    <span>América</span>
+                    <div class="escudo-img" style="background-color: #f1c40f; color: #000;">LOCAL</div>
+                    <span id="txt-equipo-l">Equipo A</span>
                 </button>
                 <button class="btn-empate" onclick="seleccionarGanador('partido-1', 'empate')">EMPATE</button>
                 <button class="escudo-btn" onclick="seleccionarGanador('partido-1', 'visitante')">
-                    <div class="escudo-img" style="background-color: #c0392b; color: #fff;">GDL</div>
-                    <span>Chivas</span>
+                    <div class="escudo-img" style="background-color: #c0392b; color: #fff;">VISIT</div>
+                    <span id="txt-equipo-v">Equipo B</span>
                 </button>
             </div>
             <div class="inputs-marcador">
@@ -299,158 +379,155 @@
                 <input type="number" min="0" class="input-goles" id="goles-visitante-1" placeholder="0" oninput="validarCoherencia('partido-1')">
             </div>
         </div>
-        <button class="btn-accion-principal" onclick="enviarPronosticos()">ENVIAR PRONÓSTICO SEMANAL</button>
+        <button class="btn-primario" onclick="enviarPronosticoSemanal()">GUARDAR JORNADA</button>
     </div>
 
-    <!-- ================= PANTALLA 2: TABLA DE POSICIONES ================= -->
-    <div id="pantalla-tabla" class="seccion-pantalla">
+    <!-- ================= PANTALLA: TABLA DE POSICIONES ================= -->
+    <div id="pantalla-tabla" class="pantalla">
         <div class="tarjeta">
-            <p class="subtitulo-seccion">Tabla General del Torneo</p>
+            <p class="titulo-tarjeta" id="titulo-regla-tabla">Tabla General del Torneo</p>
             <table class="tabla-contenedor">
                 <thead>
                     <tr>
                         <th style="width: 15%">Pos</th>
-                        <th style="width: 50%">Usuario</th>
-                        <th style="width: 15%; text-align: center;">ME</th>
-                        <th style="width: 20%; text-align: right;">Pts</th>
+                        <th style="width: 55%">Usuario</th>
+                        <th style="width: 30%; text-align: right;">Puntos</th>
                     </tr>
                 </thead>
-                <tbody id="tabla-body">
-                    <!-- Los competidores se cargan dinámicamente con JavaScript -->
+                <tbody id="tabla-dinamica-body">
+                    <!-- Filas inyectadas por JS -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- ================= PANTALLA 3: TRANSFERENCIA BANCARIA ================= -->
-    <div id="pantalla-pago" class="seccion-pantalla">
+    <!-- ================= PANTALLA: PAGOS / BILLETERA ================= -->
+    <div id="pantalla-pago" class="pantalla">
         <div class="tarjeta">
-            <p class="subtitulo-seccion">Inscripción al Torneo</p>
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h3 style="font-size: 24px; color: #00ff88;">$500.00 MXN</h3>
-                <p style="font-size: 13px; color: #888888;">Acceso total a toda la temporada de la liga</p>
+            <p class="titulo-tarjeta">Inscripción y Control de Bolsa</p>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h3 style="font-size: 26px; color: #00ff88;">$500.00 MXN</h3>
+                <p style="font-size: 13px; color: #888;">Costo de acceso único para toda la temporada</p>
             </div>
-            <div class="info-banco">
-                <div class="dato-copiar"><span>Banco:</span> <span>STP / BBVA</span></div>
-                <div class="dato-copiar"><span>Titular:</span> <span>Liga Pro-League S.A.</span></div>
-                <div class="dato-copiar"><span>CLAVE:</span> <span style="letter-spacing:0.5px; color:#00ff88;">0123 4567 8901 2345 67</span></div>
+            
+            <p class="titulo-tarjeta" style="text-align:left; font-size:11px;">Opción 1: Transferencia Bancaria (SPEI)</p>
+            <div class="bloque-banco">
+                <div class="linea-dato"><span>Banco:</span> <span>STP / BBVA</span></div>
+                <div class="linea-dato"><span>Titular:</span> <span>Liga Pro-League</span></div>
+                <div class="linea-dato"><span>CLABE:</span> <span style="color:#00ff88; font-weight:bold;">0123 4567 8901 2345 67</span></div>
             </div>
-            <p class="nota-alerta">⚠️ <strong>Importante:</strong> Una vez hecha tu transferencia SPEI, envía tu comprobante de pago junto con tu apodo (Nickname) al administrador por WhatsApp para activar tu usuario en la tabla general.</p>
+
+            <p class="titulo-tarjeta" style="text-align:left; font-size:11px; margin-top:20px;">Opción 2: Pago Express En Línea</p>
+            <!-- Link falso a Paypal funcional para pruebas visuales -->
+            <button class="btn-paypal" onclick="window.open('https://www.paypal.com/paypalme/TuEnlaceFalsoAqui/500mxn', '_blank')">
+                <svg style="width:16px; height:16px; fill:#fff;" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.454a.641.641 0 0 1 .632-.54h7.19c3.385 0 5.483 1.55 5.867 4.542.41 3.208-1.354 5.258-4.502 5.258h-1.63a.481.481 0 0 0-.473.4l-.841 5.34a.433.433 0 0 1-.428.366h-3.649a.434.434 0 0 0-.427.367l-.547 3.483a.434.434 0 0 1-.428.367z"/></svg>
+                Pagar con PayPal
+            </button>
+
+            <p style="font-size: 12px; color: #e67e22; line-height: 1.4; margin-top: 20px; text-align: center;">
+                ⚠️ <strong>Nota:</strong> Al pagar por cualquiera de las vías, manda tu captura de pantalla junto con tu Username al administrador para habilitar tu cuenta en la Tabla Oficial.
+            </p>
         </div>
     </div>
 
-    <!-- ================= BARRA DE NAVEGACIÓN INFERIOR FISIOLÓGICA ================= -->
-    <nav class="nav-inferior">
-        <button class="nav-btn activo" onclick="navegarA('pronosticos', this)">
+    <!-- ================= NAVEGADOR INFERIOR MUTABLE ================= -->
+    <nav class="nav-inferior" id="barra-navegacion">
+        <button class="nav-btn activo" onclick="irA('pronosticos', this)">
             <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
             Jugar
         </button>
-        <button class="nav-btn" onclick="navegarA('tabla', this)">
+        <button class="nav-btn" onclick="irA('tabla', this)">
             <svg viewBox="0 0 24 24"><path d="M10 20h4V4h-4v16zm-6 0h4v-10H4v10zM16 9v11h4V9h-4z"/></svg>
             Tabla
         </button>
-        <button class="nav-btn" onclick="navegarA('pago', this)">
+        <button class="nav-btn" onclick="irA('pago', this)">
             <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-            Pagar
+            Pagos
         </button>
     </nav>
 
     <script>
-        // 1. SISTEMA DE NAVEGACIÓN (CAMBIO DE PESTAÑAS)
-        function navegarA(idPantalla, botonActivo) {
-            // Desactivar todas las pantallas
-            document.querySelectorAll('.seccion-pantalla').forEach(p => p.classList.remove('activa'));
-            // Desactivar todos los botones de la barra
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('activo'));
-            
-            // Activar la seleccionada
-            document.getElementById(`pantalla-${idPantalla}`).classList.add('activa');
-            botonActivo.classList.add('activo');
-
-            // Cambiar textos del Header según sección
-            if(idPantalla === 'tabla') {
-                document.getElementById('titulo-app').innerText = "POSICIONES";
-                document.getElementById('subtitulo-app').innerText = "Así va la lucha por el premio mayor";
-            } else if(idPantalla === 'pago') {
-                document.getElementById('titulo-app').innerText = "BILLETERA";
-                document.getElementById('subtitulo-app').innerText = "Asegura tu lugar en la bolsa general";
-            } else {
-                document.getElementById('titulo-app').innerText = "PRO-LEAGUE";
-                document.getElementById('subtitulo-app').innerText = "Jornada 1 · Quiniela de Expertos";
-            }
-        }
-
-        // 2. SIMULACIÓN DE LA BASE DE DATOS DE COMPETIDORES
-        const competidores = [
-            { pos: 1, usuario: "Carlos_Mtz", me: 4, pts: 15 },
-            { pos: 2, usuario: "Alex_Rodríguez", me: 3, pts: 12 },
-            { pos: 3, usuario: "Juan_Quinielas", me: 2, pts: 10 },
-            { pos: 4, usuario: "Fer_Futbol", me: 1, pts: 7 },
-            { pos: 5, usuario: "Héctor_99", me: 0, pts: 4 }
-        ];
-
-        // Cargar los datos automáticamente en la tabla HTML al abrir
-        const tbody = document.getElementById('tabla-body');
-        competidores.forEach(c => {
-            const claseTop = c.pos <= 3 ? 'top-3' : '';
-            tbody.innerHTML += `
-                <tr class="fila-usuario ${claseTop}">
-                    <td>#${c.pos}</td>
-                    <td><strong>${c.usuario}</strong></td>
-                    <td style="text-align: center; color: #888;">${c.me}</td>
-                    <td style="text-align: right; font-weight: bold; color: #00ff88;">${c.pts} pts</td>
-                </tr>
-            `;
-        });
-
-        // 3. LÓGICA DE JUEGO (Mismo control de coherencia anterior)
+        // VARIABLES GLOBALES DE CONTROL DE ESTADO
+        let ligaSeleccionada = 'mx';
+        let datosUsuarioLoggeado = null;
         let eleccionesGanador = { 'partido-1': null };
 
-        function seleccionarGanador(partidoId, opcion) {
-            const tarjeta = document.getElementById(partidoId);
-            tarjeta.querySelectorAll('.escudo-btn, .btn-empate').forEach(btn => btn.classList.remove('seleccionado'));
-            eleccionesGanador[partidoId] = opcion;
+        // BASE DE DATOS DE PRUEBA (Para simular las dos ligas y ver los empates reales)
+        const dbCompetidores = {
+            mx: [
+                { usuario: "Carlos_Mtz", pts: 25 },
+                { usuario: "Alex_Rodríguez", pts: 21 }, // Empatados (Liguilla)
+                { usuario: "Juan_Quinielas", pts: 21 }, // Empatados (Liguilla)
+                { usuario: "Fer_Futbol", pts: 14 }
+            ],
+            eur: [
+                { usuario: "Iker_Euro", pts: 30 },
+                { usuario: "Luis_CR7", pts: 24 },    // Empatados (Dividen)
+                { usuario: "Gorka_Bilbao", pts: 24 }, // Empatados (Dividen)
+                { usuario: "Mbacke_9", pts: 10 }
+            ]
+        };
 
-            if (opcion === 'local') tarjeta.querySelectorAll('.escudo-btn')[0].classList.add('seleccionado');
-            else if (opcion === 'empate') tarjeta.querySelector('.btn-empate').classList.add('seleccionado');
-            else if (opcion === 'visitante') tarjeta.querySelectorAll('.escudo-btn')[1].classList.add('seleccionado');
-
-            validarCoherencia(partidoId);
+        // 1. MANEJO DE REGISTRO
+        function setLiga(tipo) {
+            ligaSeleccionada = tipo;
+            document.getElementById('liga-mx').classList.remove('seleccionada');
+            document.getElementById('liga-eur').classList.remove('seleccionada');
+            document.getElementById(`liga-${tipo}`).classList.add('seleccionada');
         }
 
-        function validarCoherencia(partidoId) {
-            const golesLocal = parseInt(document.getElementById('goles-local-1').value);
-            const golesVisitante = parseInt(document.getElementById('goles-visitante-1').value);
-            const eleccion = eleccionesGanador[partidoId];
-
-            if (isNaN(golesLocal) || isNaN(golesVisitante) || !eleccion) return true;
-
-            if (eleccion === 'local' && golesLocal <= golesVisitante) {
-                alert("¡Incoherencia! Elegiste que gana América, el marcador debe favorecerlo.");
-                return false;
-            }
-            if (eleccion === 'visitante' && golesVisitante <= golesLocal) {
-                alert("¡Incoherencia! Elegiste que gana Chivas, el marcador debe favorecerlo.");
-                return false;
-            }
-            if (eleccion === 'empate' && golesLocal !== golesVisitante) {
-                alert("¡Incoherencia! Elegiste Empate, los goles deben ser iguales.");
-                return false;
-            }
-            return true;
+        function simularGoogleAuth() {
+            // Simulación rápida de captura de datos de Google Auth API
+            document.getElementById('reg-username').value = "User_Google_77";
+            alert("¡Conexión con Google Exitosa! Tus datos de perfil se cargaron.");
         }
 
-        function enviarPronosticos() {
-            const golesLocal = document.getElementById('goles-local-1').value;
-            const golesVisitante = document.getElementById('goles-visitante-1').value;
-            const eleccion = eleccionesGanador['partido-1'];
-
-            if (!eleccion || golesLocal === "" || golesVisitante === "") {
-                alert("Completa todo el bloque del partido antes de guardar.");
+        function ejecutarRegistroCompleto() {
+            const username = document.getElementById('reg-username').value.trim();
+            if(!username) {
+                alert("Por favor introduce o selecciona un Username válido.");
                 return;
             }
-            alert("¡Tu pronóstico ha sido registrado localmente!\nPara ligar tu cuenta a la base de datos global, recuerda completar tu pago de inscripción.");
+
+            datosUsuarioLoggeado = { nickname: username, liga: ligaSeleccionada };
+
+            // Modificar los nombres de los equipos según la liga elegida para darle realismo
+            if(ligaSeleccionada === 'mx') {
+                document.getElementById('txt-equipo-l').innerText = "América";
+                document.getElementById('txt-equipo-v').innerText = "Chivas";
+            } else {
+                document.getElementById('txt-equipo-l').innerText = "Real Madrid";
+                document.getElementById('txt-equipo-v').innerText = "Barcelona";
+            }
+
+            // Desbloquear la navegación y pasar a la app
+            document.getElementById('pantalla-registro').classList.remove('activa');
+            document.getElementById('barra-navegacion').style.display = 'flex';
+            
+            // Construir la tabla correspondiente de inmediato
+            construirTablaPosiciones();
+            
+            // Redireccionar al módulo principal de juego
+            irA('pronosticos', document.querySelectorAll('.nav-btn')[0]);
         }
-    </script>
-</body>
-</html>
+
+        // 2. CONTROL DE PESTAÑAS (SPA NAVEGACIÓN)
+        function irA(idPantalla, boton) {
+            document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('activo'));
+            
+            document.getElementById(`pantalla-${idPantalla}`).classList.add('activa');
+            boton.classList.add('activo');
+
+            // Ajustes dinámicos de títulos globales
+            if(idPantalla === 'pronosticos') {
+                document.getElementById('app-main-title').innerText = "PRONÓSTICOS";
+                document.getElementById('app-sub-title').innerText = `Registra tus marcadores de la Liga ${ligaSeleccionada.toUpperCase()}`;
+            } else if(idPantalla === 'tabla') {
+                document.getElementById('app-main-title').innerText = "POSICIONES";
+                document.getElementById('app-sub-title').innerText = `Ranking Oficial · Formato de Desempate Activo`;
+            } else if(idPantalla === 'pago') {
+                document.getElementById('app-main-title').innerText = "BILLETERA";
+                document.getElementById('app-sub-title').innerText = "Administra tus accesos e inscripciones";
+            }
+       
