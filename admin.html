@@ -2,208 +2,68 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRO-LEAGUE | Panel de Control</title>
+    <title>PANEL DE ADMINISTRADOR</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .contenedor {
-            width: 100%;
-            max-width: 480px;
-        }
-
-        h1 {
-            color: #00ff88;
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 5px;
-        }
-
-        .sub {
-            text-align: center;
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 25px;
-        }
-
-        .tarjeta {
-            background-color: #1e1e1e;
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid #2a2a2a;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 14px;
-            text-transform: uppercase;
-            color: #888;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .lista-usuarios {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .usuario-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #252525;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #333;
-        }
-
-        .nombre {
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        .status-pendiente {
-            color: #f1c40f;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .status-pagado {
-            color: #00ff88;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .btn-activar {
-            background-color: #00ff88;
-            color: #000;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-
-        .btn-activar:active { transform: scale(0.95); }
-
-        .btn-desactivar {
-            background-color: transparent;
-            color: #ea4335;
-            border: 1px solid #ea4335;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-
-        .btn-desactivar:active { transform: scale(0.95); }
-
-        .msg-vacio {
-            text-align: center;
-            color: #666;
-            font-size: 13px;
-            padding: 15px 0;
-        }
+        body { background-color: #0f0f0f; color: #fff; font-family: sans-serif; padding: 20px; }
+        .tarjeta { background: #1e1e1e; padding: 20px; border-radius: 12px; max-width: 600px; margin: auto; }
+        h1 { color: #00ff88; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #333; text-align: left; }
+        .btn-activar { background: #00ff88; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .estado { font-weight: bold; }
+        .activo { color: #00ff88; }
+        .pendiente { color: #ff9494; }
     </style>
 </head>
 <body>
 
-    <div class="contenedor">
-        <h1>PRO-LEAGUE ADMIN</h1>
-        <p class="sub">Panel Secreto de Activación</p>
+<div class="tarjeta">
+    <h1>Panel de Control Admin</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="lista-usuarios"></tbody>
+    </table>
+    <br>
+    <button onclick="window.location.href='index.html'" style="width:100%; padding:10px; background:#333; color:white; border:none; cursor:pointer;">Volver a la Quiniela</button>
+</div>
 
-        <div class="tarjeta">
-            <h2>Jugadores Registrados</h2>
-            <div id="lista-usuarios-admin" class="lista-usuarios">
-                <!-- Se llena dinámicamente con JavaScript -->
-            </div>
-            <div id="admin-vacio" class="msg-vacio" style="display: none;">
-                No hay ningún usuario registrado todavía en el sistema.
-            </div>
-        </div>
-    </div>
+<script>
+    const CLAVE_LOCAL = 'quiniela_prod_v2';
 
-    <script>
-        function cargarUsuariosAdmin() {
-            const contenedor = document.getElementById('lista-usuarios-admin');
-            const avisoVacio = document.getElementById('admin-vacio');
-            contenedor.innerHTML = "";
+    function renderizarAdmin() {
+        const lista = JSON.parse(localStorage.getItem(CLAVE_LOCAL)) || [];
+        const tbody = document.getElementById('lista-usuarios');
+        tbody.innerHTML = "";
 
-            // Leemos la misma clave que index.html
-            let listaUsuarios = JSON.parse(localStorage.getItem('quiniela_prod_v1')) || [];
+        lista.forEach((u, index) => {
+            if (u.usuario === 'admin') return; // No editar al admin
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${u.usuario}</td>
+                <td class="estado ${u.pagado ? 'activo' : 'pendiente'}">${u.pagado ? 'ACTIVADO' : 'PENDIENTE'}</td>
+                <td>
+                    ${!u.pagado ? `<button class="btn-activar" onclick="activarUsuario(${index})">Activar</button>` : '---'}
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
 
-            if (listaUsuarios.length === 0) {
-                avisoVacio.style.display = 'block';
-                return;
-            }
-            avisoVacio.style.display = 'none';
+    function activarUsuario(index) {
+        let lista = JSON.parse(localStorage.getItem(CLAVE_LOCAL));
+        lista[index].pagado = true;
+        localStorage.setItem(CLAVE_LOCAL, JSON.stringify(lista));
+        renderizarAdmin();
+        alert("Usuario activado con éxito. Ya tiene acceso a la quiniela.");
+    }
 
-            // Ordenar alfabéticamente por nombre de usuario
-            listaUsuarios.sort((a, b) => a.usuario.localeCompare(b.usuario));
-
-            listaUsuarios.forEach(u => {
-                const div = document.createElement('div');
-                div.className = 'usuario-item';
-
-                // Si ya pagó, opción de bloquear; si no, botón de activar
-                const botonAccion = u.pagado 
-                    ? `<button class="btn-desactivar" onclick="cambiarEstadoPago('${u.usuario}', false)">Bloquear</button>`
-                    : `<button class="btn-activar" onclick="cambiarEstadoPago('${u.usuario}', true)">Activar Acceso</button>`;
-
-                const textoStatus = u.pagado 
-                    ? `<span class="status-pagado">● Activo (Pagado)</span>` 
-                    : `<span class="status-pendiente">● Pendiente</span>`;
-
-                div.innerHTML = `
-                    <div>
-                        <div class="nombre">${u.usuario}</div>
-                        <div>${textoStatus}</div>
-                    </div>
-                    <div>
-                        ${botonAccion}
-                    </div>
-                `;
-                contenedor.appendChild(div);
-            });
-        }
-
-        function cambiarEstadoPago(username, nuevoEstado) {
-            let listaUsuarios = JSON.parse(localStorage.getItem('quiniela_prod_v1')) || [];
-            
-            listaUsuarios = listaUsuarios.map(u => {
-                if (u.usuario === username) {
-                    u.pagado = nuevoEstado;
-                }
-                return u;
-            });
-
-            localStorage.setItem('quiniela_prod_v1', JSON.stringify(listaUsuarios));
-            cargarUsuariosAdmin(); // Recargar la interfaz al momento
-        }
-
-        // Cargar la lista automáticamente al abrir la página
-        window.onload = cargarUsuariosAdmin;
-    </script>
+    renderizarAdmin();
+</script>
 </body>
 </html>
