@@ -530,4 +530,92 @@
                 document.getElementById('app-main-title').innerText = "BILLETERA";
                 document.getElementById('app-sub-title').innerText = "Administra tus accesos e inscripciones";
             }
-       
+       }
+
+        // 3. GENERADOR DE TABLA CON LOGICA MARCADORA DE EMPATES
+        function construirTablaPosiciones() {
+            const lista = dbCompetidores[ligaSeleccionada];
+            const tbody = document.getElementById('tabla-dinamica-body');
+            const lblRegla = document.getElementById('titulo-regla-tabla');
+            tbody.innerHTML = ""; // Limpiar tabla previa
+
+            // Configurar el título superior según la regla de la liga
+            if(ligaSeleccionada === 'mx') {
+                lblRegla.innerText = "Tabla Liga MX (Criterio: Desempate en Liguilla)";
+            } else {
+                lblRegla.innerText = "Tabla Europea (Criterio: Se divide el Premio)";
+            }
+
+            lista.forEach((c, index) => {
+                const empataArriba = index > 0 && lista[index - 1].pts === c.pts;
+                const empataAbajo = index < lista.length - 1 && lista[index + 1].pts === c.pts;
+                
+                let claseFila = "";
+                let tagDesempate = "";
+
+                if(empataArriba || empataAbajo) {
+                    claseFila = "empatado";
+                    tagDesempate = ligaSeleccionada === 'mx' 
+                        ? '<span class="badge-regla">LIGUILLA</span>' 
+                        : '<span class="badge-regla" style="background-color:#3498db; color:#fff;">DIVIDE</span>';
+                }
+
+                tbody.innerHTML += `
+                    <tr class="fila-usuario ${claseFila}">
+                        <td>#${index + 1}</td>
+                        <td><strong>${c.usuario}</strong> ${tagDesempate}</td>
+                        <td style="text-align: right; font-weight: bold;">${c.pts} pts</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // 4. LÓGICA DE CONTROL DE JUEGO (COHERENCIA Y ENVÍO)
+        function seleccionarGanador(partidoId, opcion) {
+            const tarjeta = document.getElementById(partidoId);
+            tarjeta.querySelectorAll('.escudo-btn, .btn-empate').forEach(btn => btn.classList.remove('seleccionado'));
+            eleccionesGanador[partidoId] = opcion;
+
+            if (opcion === 'local') tarjeta.querySelectorAll('.escudo-btn')[0].classList.add('seleccionado');
+            else if (opcion === 'empate') tarjeta.querySelector('.btn-empate').classList.add('seleccionado');
+            else if (opcion === 'visitante') tarjeta.querySelectorAll('.escudo-btn')[1].classList.add('seleccionado');
+
+            validarCoherencia(partidoId);
+        }
+
+        function validarCoherencia(partidoId) {
+            const golesLocal = parseInt(document.getElementById('goles-local-1').value);
+            const golesVisitante = parseInt(document.getElementById('goles-visitante-1').value);
+            const eleccion = eleccionesGanador[partidoId];
+
+            if (isNaN(golesLocal) || isNaN(golesVisitante) || !eleccion) return true;
+
+            if (eleccion === 'local' && golesLocal <= golesVisitante) {
+                alert("¡Incoherencia! Elegiste que gana el local, el marcador debe favorecerlo.");
+                return false;
+            }
+            if (eleccion === 'visitante' && golesVisitante <= golesLocal) {
+                alert("¡Incoherencia! Elegiste que gana la visita, el marcador debe favorecerlo.");
+                return false;
+            }
+            if (eleccion === 'empate' && golesLocal !== golesVisitante) {
+                alert("¡Incoherencia! Elegiste Empate, los goles deben ser idénticos.");
+                return false;
+            }
+            return true;
+        }
+
+        function enviarPrononsticoSemanal() {
+            const gl = document.getElementById('goles-local-1').value;
+            const gv = document.getElementById('goles-visitante-1').value;
+            const el = eleccionesGanador['partido-1'];
+
+            if (!el || gl === "" || gv === "") {
+                alert("Completa tu pronóstico (selecciona ganador y goles) antes de guardar.");
+                return;
+            }
+            alert(`¡Pronóstico guardado localmente para ${datosUsuarioLoggeado.nickname}!\nRecuerda validar tu comprobante de pago con el administrador.`);
+        }
+    </script>
+</body>
+</html>
