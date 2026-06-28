@@ -82,6 +82,17 @@
             font-weight: 700;
         }
 
+        /* AVISOS DE STATUS EN PANTALLA */
+        .status-msg {
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
         /* ELEMENTOS DE FORMULARIO (REGISTRO) */
         .input-text {
             width: 100%;
@@ -245,7 +256,7 @@
 
         .tabla-contenedor td { padding: 12px 0; border-bottom: 1px solid #222; }
 
-        /* REGLES VERDES DE EMPATE */
+        /* REGLAS VERDES DE EMPATE */
         .fila-usuario.empatado td {
             background-color: rgba(46, 204, 113, 0.12);
             color: #2ecc71;
@@ -304,7 +315,7 @@
             width: 100%;
             max-width: 450px;
             background-color: #1e1e1e;
-            display: none; /* Se activa tras registrarse */
+            display: none;
             justify-content: space-around;
             padding: 12px 0;
             border-top: 1px solid #2a2a2a;
@@ -335,54 +346,53 @@
         <p id="app-sub-title">Bienvenido a la plataforma de quinielas</p>
     </header>
 
-    <!-- ================= PANTALLA: REGISTRO e INICIO ================= -->
     <div id="pantalla-registro" class="pantalla activa">
         <div class="tarjeta">
             <p class="titulo-tarjeta">Crear Nueva Cuenta</p>
             
-            <!-- Botón de Simulación Google -->
             <button class="btn-google" onclick="simularGoogleAuth()">
                 <svg style="width:18px; height:18px;" viewBox="0 0 24 24"><path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.256-3.133C18.417 1.832 15.614 1 12.24 1 6.033 1 1 6.033 1 12.24s5.033 11.24 11.24 11.24c6.478 0 10.793-4.537 10.793-10.985 0-.746-.08-1.32-.176-1.71H12.24z"/></svg>
                 Registrarse con Google
             </button>
 
+            <div id="registro-status" class="status-msg"></div>
+
             <input type="text" class="input-text" id="reg-username" placeholder="Elige tu Username / Apodo">
             
-            <p class="titulo-tarjeta" style="margin-top:20px; margin-bottom:10px;">Selecciona tu Liga de Juego</p>
+            <p class="titulo-tarjeta" style="margin-top:10px; margin-bottom:10px;">Selecciona tu Liga de Juego</p>
             <div class="selector-liga">
-                <div class="opcion-liga seleccionada" id="liga-mx" onclick="setLiga('mx')">Liga MX<br><small style="font-size:10px;">Desempate en Liguilla</small></div>
-                <div class="opcion-liga" id="liga-eur" onclick="setLiga('eur')">Liga Europea<br><small style="font-size:10px;">Empates dividen premio</small></div>
+                <div class="opcion-liga seleccionada" id="liga-mx" onclick="setLiga('mx')">Liga MX<br><small style="font-size:10px;">Liguilla</small></div>
+                <div class="opcion-liga" id="liga-eur" onclick="setLiga('eur')">Europea<br><small style="font-size:10px;">Divide bolsa</small></div>
             </div>
 
             <button class="btn-primario" onclick="ejecutarRegistroCompleto()">COMPLETAR REGISTRO</button>
         </div>
     </div>
 
-    <!-- ================= PANTALLA: PRONÓSTICOS ================= -->
     <div id="pantalla-pronosticos" class="pantalla">
         <div class="tarjeta" id="partido-1">
             <p class="titulo-tarjeta">Partido de la Semana</p>
             <div class="fila-equipos">
-                <button class="escudo-btn" onclick="seleccionarGanador('partido-1', 'local')">
+                <button class="escudo-btn" id="btn-local" onclick="seleccionarGanador('partido-1', 'local')">
                     <div class="escudo-img" style="background-color: #f1c40f; color: #000;">LOCAL</div>
                     <span id="txt-equipo-l">Equipo A</span>
                 </button>
-                <button class="btn-empate" onclick="seleccionarGanador('partido-1', 'empate')">EMPATE</button>
-                <button class="escudo-btn" onclick="seleccionarGanador('partido-1', 'visitante')">
+                <button class="btn-empate" id="btn-empate" onclick="seleccionarGanador('partido-1', 'empate')">EMPATE</button>
+                <button class="escudo-btn" id="btn-visitante" onclick="seleccionarGanador('partido-1', 'visitante')">
                     <div class="escudo-img" style="background-color: #c0392b; color: #fff;">VISIT</div>
                     <span id="txt-equipo-v">Equipo B</span>
                 </button>
             </div>
             <div class="inputs-marcador">
-                <input type="number" min="0" class="input-goles" id="goles-local-1" placeholder="0" oninput="validarCoherencia('partido-1')">
+                <input type="number" min="0" class="input-goles" id="goles-local-1" placeholder="0">
                 <span style="color:#555; font-weight:bold;">-</span>
-                <input type="number" min="0" class="input-goles" id="goles-visitante-1" placeholder="0" oninput="validarCoherencia('partido-1')">
+                <input type="number" min="0" class="input-goles" id="goles-visitante-1" placeholder="0">
             </div>
         </div>
-        <button class="btn-primario" onclick="enviarPronosticoSemanal()">GUARDAR JORNADA</button>
+        <div id="juego-status" class="status-msg"></div>
+        <button class="btn-primario" onclick="enviarPrononsticoSemanal()">GUARDAR JORNADA</button>
     </div>
 
-    <!-- ================= PANTALLA: TABLA DE POSICIONES ================= -->
     <div id="pantalla-tabla" class="pantalla">
         <div class="tarjeta">
             <p class="titulo-tarjeta" id="titulo-regla-tabla">Tabla General del Torneo</p>
@@ -394,14 +404,11 @@
                         <th style="width: 30%; text-align: right;">Puntos</th>
                     </tr>
                 </thead>
-                <tbody id="tabla-dinamica-body">
-                    <!-- Filas inyectadas por JS -->
-                </tbody>
+                <tbody id="tabla-dinamica-body"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- ================= PANTALLA: PAGOS / BILLETERA ================= -->
     <div id="pantalla-pago" class="pantalla">
         <div class="tarjeta">
             <p class="titulo-tarjeta">Inscripción y Control de Bolsa</p>
@@ -418,19 +425,13 @@
             </div>
 
             <p class="titulo-tarjeta" style="text-align:left; font-size:11px; margin-top:20px;">Opción 2: Pago Express En Línea</p>
-            <!-- Link falso a Paypal funcional para pruebas visuales -->
             <button class="btn-paypal" onclick="window.open('https://www.paypal.com/paypalme/TuEnlaceFalsoAqui/500mxn', '_blank')">
                 <svg style="width:16px; height:16px; fill:#fff;" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.454a.641.641 0 0 1 .632-.54h7.19c3.385 0 5.483 1.55 5.867 4.542.41 3.208-1.354 5.258-4.502 5.258h-1.63a.481.481 0 0 0-.473.4l-.841 5.34a.433.433 0 0 1-.428.366h-3.649a.434.434 0 0 0-.427.367l-.547 3.483a.434.434 0 0 1-.428.367z"/></svg>
                 Pagar con PayPal
             </button>
-
-            <p style="font-size: 12px; color: #e67e22; line-height: 1.4; margin-top: 20px; text-align: center;">
-                ⚠️ <strong>Nota:</strong> Al pagar por cualquiera de las vías, manda tu captura de pantalla junto con tu Username al administrador para habilitar tu cuenta en la Tabla Oficial.
-            </p>
         </div>
     </div>
 
-    <!-- ================= NAVEGADOR INFERIOR MUTABLE ================= -->
     <nav class="nav-inferior" id="barra-navegacion">
         <button class="nav-btn activo" onclick="irA('pronosticos', this)">
             <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
@@ -447,28 +448,30 @@
     </nav>
 
     <script>
-        // VARIABLES GLOBALES DE CONTROL DE ESTADO
         let ligaSeleccionada = 'mx';
-        let datosUsuarioLoggeado = null;
         let eleccionesGanador = { 'partido-1': null };
 
-        // BASE DE DATOS DE PRUEBA (Para simular las dos ligas y ver los empates reales)
-        const dbCompetidores = {
+        // MARCADORES REALES DE CONTROL (Simulados para calificar tu punto automático)
+        // Liga MX real quedó: 2-1 (Gana Local). Liga Europea real quedó: 1-1 (Empate).
+        const RESULTADOS_REALES = {
+            mx: { golesL: 2, golesV: 1, ganador: 'local' },
+            eur: { golesL: 1, golesV: 1, ganador: 'empate' }
+        };
+
+        // BASE DE DATOS DE COMPETIDORES BASE
+        let dbCompetidores = {
             mx: [
                 { usuario: "Carlos_Mtz", pts: 25 },
-                { usuario: "Alex_Rodríguez", pts: 21 }, // Empatados (Liguilla)
-                { usuario: "Juan_Quinielas", pts: 21 }, // Empatados (Liguilla)
+                { usuario: "Juan_Quinielas", pts: 21 },
                 { usuario: "Fer_Futbol", pts: 14 }
             ],
             eur: [
                 { usuario: "Iker_Euro", pts: 30 },
-                { usuario: "Luis_CR7", pts: 24 },    // Empatados (Dividen)
-                { usuario: "Gorka_Bilbao", pts: 24 }, // Empatados (Dividen)
+                { usuario: "Gorka_Bilbao", pts: 24 },
                 { usuario: "Mbacke_9", pts: 10 }
             ]
         };
 
-        // 1. MANEJO DE REGISTRO
         function setLiga(tipo) {
             ligaSeleccionada = tipo;
             document.getElementById('liga-mx').classList.remove('seleccionada');
@@ -477,21 +480,30 @@
         }
 
         function simularGoogleAuth() {
-            // Simulación rápida de captura de datos de Google Auth API
-            document.getElementById('reg-username').value = "User_Google_77";
-            alert("¡Conexión con Google Exitosa! Tus datos de perfil se cargaron.");
+            document.getElementById('reg-username').value = "Alex_Rodríguez";
+            const statusBox = document.getElementById('registro-status');
+            statusBox.style.display = 'block';
+            statusBox.style.backgroundColor = 'rgba(0, 255, 136, 0.1)';
+            statusBox.style.color = '#00ff88';
+            statusBox.innerText = "✓ Conectado con Google Perfil";
         }
 
         function ejecutarRegistroCompleto() {
             const username = document.getElementById('reg-username').value.trim();
+            const statusBox = document.getElementById('registro-status');
+            
             if(!username) {
-                alert("Por favor introduce o selecciona un Username válido.");
+                statusBox.style.display = 'block';
+                statusBox.style.backgroundColor = 'rgba(234, 67, 53, 0.1)';
+                statusBox.style.color = '#ea4335';
+                statusBox.innerText = "❌ Escribe un apodo primero.";
                 return;
             }
 
-            datosUsuarioLoggeado = { nickname: username, liga: ligaSeleccionada };
+            // Guardar sesión activa localmente para que funcione de verdad
+            const usuarioActivo = { nickname: username, liga: ligaSeleccionada, puntos: 0 };
+            localStorage.setItem('usuario_proleague', JSON.stringify(usuarioActivo));
 
-            // Modificar los nombres de los equipos según la liga elegida para darle realismo
             if(ligaSeleccionada === 'mx') {
                 document.getElementById('txt-equipo-l').innerText = "América";
                 document.getElementById('txt-equipo-v').innerText = "Chivas";
@@ -500,18 +512,13 @@
                 document.getElementById('txt-equipo-v').innerText = "Barcelona";
             }
 
-            // Desbloquear la navegación y pasar a la app
             document.getElementById('pantalla-registro').classList.remove('activa');
             document.getElementById('barra-navegacion').style.display = 'flex';
             
-            // Construir la tabla correspondiente de inmediato
             construirTablaPosiciones();
-            
-            // Redireccionar al módulo principal de juego
             irA('pronosticos', document.querySelectorAll('.nav-btn')[0]);
         }
 
-        // 2. CONTROL DE PESTAÑAS (SPA NAVEGACIÓN)
         function irA(idPantalla, boton) {
             document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('activo'));
@@ -519,103 +526,23 @@
             document.getElementById(`pantalla-${idPantalla}`).classList.add('activa');
             boton.classList.add('activo');
 
-            // Ajustes dinámicos de títulos globales
             if(idPantalla === 'pronosticos') {
                 document.getElementById('app-main-title').innerText = "PRONÓSTICOS";
-                document.getElementById('app-sub-title').innerText = `Registra tus marcadores de la Liga ${ligaSeleccionada.toUpperCase()}`;
+                document.getElementById('app-sub-title').innerText = `Liga ${ligaSeleccionada.toUpperCase()}`;
             } else if(idPantalla === 'tabla') {
                 document.getElementById('app-main-title').innerText = "POSICIONES";
-                document.getElementById('app-sub-title').innerText = `Ranking Oficial · Formato de Desempate Activo`;
+                document.getElementById('app-sub-title').innerText = `Ranking General Oficial`;
+                construirTablaPosiciones(); // Forzar reconstrucción por si cambiaron puntos
             } else if(idPantalla === 'pago') {
                 document.getElementById('app-main-title').innerText = "BILLETERA";
-                document.getElementById('app-sub-title').innerText = "Administra tus accesos e inscripciones";
+                document.getElementById('app-sub-title').innerText = "Métodos de pago autorizados";
             }
-       }
-
-        // 3. GENERADOR DE TABLA CON LOGICA MARCADORA DE EMPATES
-        function construirTablaPosiciones() {
-            const lista = dbCompetidores[ligaSeleccionada];
-            const tbody = document.getElementById('tabla-dinamica-body');
-            const lblRegla = document.getElementById('titulo-regla-tabla');
-            tbody.innerHTML = ""; // Limpiar tabla previa
-
-            // Configurar el título superior según la regla de la liga
-            if(ligaSeleccionada === 'mx') {
-                lblRegla.innerText = "Tabla Liga MX (Criterio: Desempate en Liguilla)";
-            } else {
-                lblRegla.innerText = "Tabla Europea (Criterio: Se divide el Premio)";
-            }
-
-            lista.forEach((c, index) => {
-                const empataArriba = index > 0 && lista[index - 1].pts === c.pts;
-                const empataAbajo = index < lista.length - 1 && lista[index + 1].pts === c.pts;
-                
-                let claseFila = "";
-                let tagDesempate = "";
-
-                if(empataArriba || empataAbajo) {
-                    claseFila = "empatado";
-                    tagDesempate = ligaSeleccionada === 'mx' 
-                        ? '<span class="badge-regla">LIGUILLA</span>' 
-                        : '<span class="badge-regla" style="background-color:#3498db; color:#fff;">DIVIDE</span>';
-                }
-
-                tbody.innerHTML += `
-                    <tr class="fila-usuario ${claseFila}">
-                        <td>#${index + 1}</td>
-                        <td><strong>${c.usuario}</strong> ${tagDesempate}</td>
-                        <td style="text-align: right; font-weight: bold;">${c.pts} pts</td>
-                    </tr>
-                `;
-            });
         }
 
-        // 4. LÓGICA DE CONTROL DE JUEGO (COHERENCIA Y ENVÍO)
         function seleccionarGanador(partidoId, opcion) {
-            const tarjeta = document.getElementById(partidoId);
-            tarjeta.querySelectorAll('.escudo-btn, .btn-empate').forEach(btn => btn.classList.remove('seleccionado'));
+            document.getElementById('btn-local').classList.remove('seleccionado');
+            document.getElementById('btn-empate').classList.remove('seleccionado');
+            document.getElementById('btn-visitante').classList.remove('seleccionado');
+            
             eleccionesGanador[partidoId] = opcion;
-
-            if (opcion === 'local') tarjeta.querySelectorAll('.escudo-btn')[0].classList.add('seleccionado');
-            else if (opcion === 'empate') tarjeta.querySelector('.btn-empate').classList.add('seleccionado');
-            else if (opcion === 'visitante') tarjeta.querySelectorAll('.escudo-btn')[1].classList.add('seleccionado');
-
-            validarCoherencia(partidoId);
-        }
-
-        function validarCoherencia(partidoId) {
-            const golesLocal = parseInt(document.getElementById('goles-local-1').value);
-            const golesVisitante = parseInt(document.getElementById('goles-visitante-1').value);
-            const eleccion = eleccionesGanador[partidoId];
-
-            if (isNaN(golesLocal) || isNaN(golesVisitante) || !eleccion) return true;
-
-            if (eleccion === 'local' && golesLocal <= golesVisitante) {
-                alert("¡Incoherencia! Elegiste que gana el local, el marcador debe favorecerlo.");
-                return false;
-            }
-            if (eleccion === 'visitante' && golesVisitante <= golesLocal) {
-                alert("¡Incoherencia! Elegiste que gana la visita, el marcador debe favorecerlo.");
-                return false;
-            }
-            if (eleccion === 'empate' && golesLocal !== golesVisitante) {
-                alert("¡Incoherencia! Elegiste Empate, los goles deben ser idénticos.");
-                return false;
-            }
-            return true;
-        }
-
-        function enviarPrononsticoSemanal() {
-            const gl = document.getElementById('goles-local-1').value;
-            const gv = document.getElementById('goles-visitante-1').value;
-            const el = eleccionesGanador['partido-1'];
-
-            if (!el || gl === "" || gv === "") {
-                alert("Completa tu pronóstico (selecciona ganador y goles) antes de guardar.");
-                return;
-            }
-            alert(`¡Pronóstico guardado localmente para ${datosUsuarioLoggeado.nickname}!\nRecuerda validar tu comprobante de pago con el administrador.`);
-        }
-    </script>
-</body>
-</html>
+            
