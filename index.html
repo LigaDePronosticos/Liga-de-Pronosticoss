@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liga de Pronósticos | Quiniela</title>
+    <style>
+        /* ESTILOS BASE - MINIMALISTA OSCURO */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #00ff88;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #aaaaaa;
+        }
+
+        /* CONTENEDOR DE PARTIDOS */
+        .contenedor-partidos {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* TARJETA DE PARTIDO */
+        .tarjeta-partido {
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid #2a2a2a;
+        }
+
+        .pregunta-titulo {
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888888;
+            margin-bottom: 15px;
+        }
+
+        /* FILA DE ESCUDOS (¿Quién ganará?) */
+        .fila-equipos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .escudo-btn {
+            background: #252525;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 38%;
+        }
+
+        /* Simulación de escudos con CSS (puedes cambiar el src por URLs de imágenes reales) */
+        .escudo-img {
+            width: 50px;
+            height: 50px;
+            background-color: #3a3a3a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .escudo-btn span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ddd;
+        }
+
+        .btn-empate {
+            background: #252525;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #aaa;
+            transition: all 0.2s ease;
+            width: 20%;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* ESTADOS SELECCIONADOS */
+        .escudo-btn.seleccionado {
+            border-color: #00ff88;
+            background-color: rgba(0, 255, 136, 0.1);
+        }
+        .escudo-btn.seleccionado span {
+            color: #00ff88;
+        }
+
+        .btn-empate.seleccionado {
+            border-color: #00ff88;
+            background-color: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+        }
+
+        /* SECCIÓN MARCADOR */
+        .seccion-marcador {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .inputs-marcador {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .input-goles {
+            width: 60px;
+            height: 45px;
+            background-color: #252525;
+            border: 2px solid #3a3a3a;
+            border-radius: 8px;
+            color: #fff;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .input-goles:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        .guion {
+            font-size: 24px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* BOTÓN ENVIAR */
+        .btn-enviar {
+            width: 100%;
+            max-width: 450px;
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-enviar:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PRO-LEAGUE</h1>
+        <p>Ingresa tus pronósticos para la jornada</p>
+    </header>
+
+    <div class="contenedor-partidos">
+        
+        <!-- TARJETA PARTIDO 1 -->
+        <div class="tarjeta-partido" id="partido-1">
+            <p class="pregunta-titulo">¿Quién ganará?</p>
+            
+            <div class="fila-equipos">
+                <!-- Botón Local -->
+                <button class="escudo-btn" onclick="seleccionarGanador('partido-1', 'local')">
+                    <!-- Cambia la letra por una etiqueta <img> cuando tengas los logos -->
+                    <div class="escudo-img" style="background-color: #f1c40f; color: #000;">AME</div>
+                    <span>América</span>
+                </button>
+
+                <!-- Botón Empate -->
+                <button class="btn-empate" onclick="seleccionarGanador('partido-1', 'empate')">
+                    EMPATE
+                </button>
+
+                <!-- Botón Visitante -->
+                <button class="escudo-btn" onclick="seleccionarGanador('partido-1', 'visitante')">
+                    <div class="escudo-img" style="background-color: #c0392b; color: #fff;">GDL</div>
+                    <span>Chivas</span>
+                </button>
+            </div>
+
+            <div class="seccion-marcador">
+                <p class="pregunta-titulo">¿Qué marcador?</p>
+                <div class="inputs-marcador">
+                    <input type="number" min="0" class="input-goles" id="goles-local-1" placeholder="0" oninput="validarCoherencia('partido-1')">
+                    <span class="guion">-</span>
+                    <input type="number" min="0" class="input-goles" id="goles-visitante-1" placeholder="0" oninput="validarCoherencia('partido-1')">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="btn-enviar" onclick="enviarPronosticos()">GUARDAR PRONÓSTICOS</button>
+
+    <script>
+        // Objeto global para almacenar la selección del ganador de cada partido
+        let eleccionesGanador = {
+            'partido-1': null // Puede ser 'local', 'visitante' o 'empate'
+        };
+
+        // FUNCIÓN 1: Manejar visualmente el click en los escudos/empate
+        function seleccionarGanador(partidoId, opcion) {
+            const tarjeta = document.getElementById(partidoId);
+            
+            // Remover la clase 'seleccionado' de todos los botones dentro de esta tarjeta
+            tarjeta.querySelectorAll('.escudo-btn, .btn-empate').forEach(btn => {
+                btn.classList.remove('seleccionado');
+            });
+
+            // Guardar la elección en nuestro objeto
+            eleccionesGanador[partidoId] = opcion;
+
+            // Añadir la clase al botón correcto basándonos en el orden de los clicks
+            if (opcion === 'local') {
+                tarjeta.querySelectorAll('.escudo-btn')[0].classList.add('seleccionado');
+            } else if (opcion === 'empate') {
+                tarjeta.querySelector('.btn-empate').classList.add('seleccionado');
+            } else if (opcion === 'visitante') {
+                tarjeta.querySelectorAll('.escudo-btn')[1].classList.add('seleccionado');
+            }
+
+            validarCoherencia(partidoId);
+        }
+
+        // FUNCIÓN 2: Validar que el marcador coincida con el escudo seleccionado
+        function validarCoherencia(partidoId) {
+            const golesLocal = parseInt(document.getElementById('goles-local-1').value);
+            const golesVisitante = parseInt(document.getElementById('goles-visitante-1').value);
+            const eleccion = eleccionesGanador[partidoId];
+
+            // Si aún no llenan ambos marcadores o no eligen escudo, no validamos todavía
+            if (isNaN(golesLocal) || isNaN(golesVisitante) || !eleccion) return true;
+
+            // Verificar fallas de lógica básica
+            if (eleccion === 'local' && golesLocal <= golesVisitante) {
+                alert("¡Cuidado! Seleccionaste que gana América, pero el marcador dice lo contrario.");
+                return false;
+            }
+            if (eleccion === 'visitante' && golesVisitante <= golesLocal) {
+                alert("¡Cuidado! Seleccionaste que gana Chivas, pero el marcador dice lo contrario.");
+                return false;
+            }
+            if (eleccion === 'empate' && golesLocal !== golesVisitante) {
+                alert("¡Cuidado! Seleccionaste Empate, pero los goles son distintos.");
+                return false;
+            }
+            return true;
+        }
+
+        // FUNCIÓN 3: Recolectar datos listos para mandar a tu Sheets/Firebase
+        function enviarPronosticos() {
+            const golesLocal = document.getElementById('goles-local-1').value;
+            const golesVisitante = document.getElementById('goles-visitante-1').value;
+            const eleccion = eleccionesGanador['partido-1'];
+
+            if (!eleccion || golesLocal === "" || golesVisitante === "") {
+                alert("Por favor, completa todo el pronóstico antes de enviar.");
+                return;
+            }
+
+            // Aquí tienes el paquete de datos limpio
+            const datosQuiniela = {
+                partido: "América vs Chivas",
+                ganador_elegido: eleccion,
+                marcador: `${golesLocal}-${golesVisitante}`
+            };
+
+            console.log("Datos listos para guardar:", datosQuiniela);
+            alert(`¡Pronóstico guardado con éxito!\nGanador: ${eleccion}\nMarcador: ${golesLocal}-${golesVisitante}`);
+            
+            // AQUÍ IRÍA TU AJUUSTE CON SHEETDB O FIREBASE MAS ADELANTE
+        }
+    </script>
+</body>
+</html>
